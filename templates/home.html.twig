@@ -6,6 +6,14 @@
 
 {% block body %}
 
+	{% if app.user %}
+		<pre>
+			{{ dump(app.user) }}
+		</pre>
+	{% else %}
+		<p>Non connecté</p>
+	{% endif %}
+
 	<h1>Nos produits phares:
 	</h1>
 	<div class="row">

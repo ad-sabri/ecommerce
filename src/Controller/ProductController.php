@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/{slug}", name="product_category")
+     * @Route("/admin/{slug}", name="product_category")
      */
     public function category($slug, CategoryRepository $categoryRepository)
     {

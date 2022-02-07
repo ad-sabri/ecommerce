@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
+use App\Entity\User;
 use App\Entity\Product;
 use App\Entity\Category;
 use Bluemmb\Faker\PicsumPhotosProvider;
@@ -23,6 +24,23 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
         $faker->addProvider(new \Bluemmb\Faker\PicsumPhotosProvider($faker));
+
+        $admin = new User;
+
+        $admin->setEmail("admin@ecommerce.com")
+            ->setPassword("password")
+            ->setFullName("Admin")
+            ->setRoles(['ROLE_ADMIN']);
+
+        $manager->persist($admin);
+
+        $user = new User();
+
+        $user->setEmail("user@ecommerce.com")
+            ->setPassword("password")
+            ->setFullName("User");
+
+        $manager->persist($user);
 
         for ($c = 1; $c < 4; $c++) {
             $category = new Category;
