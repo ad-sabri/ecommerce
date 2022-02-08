@@ -1,0 +1,15 @@
+<div class="card">
+	<img src="{{ p.mainPicture }}" class="img-fluid" alt="">
+	<div class="card-body">
+		<span class="badge bg-secondary">{{ p.category.name }}</span>
+		<h4 class="card-title">{{ p.name }}</h4>
+		<h3>{{ p.price / 100 }}
+			&euro;</h3>
+		<p class="card-text">{{ p.shortDescription }}</p>
+		<button class="btn-primary btn-sm">Voir</button>
+		<a href="{{ path('cart_add', {'id': p.id }) }}" class="btn btn-success btn-sm">
+			<i class="fas fa-shopping-cart"></i>
+			Ajouter au panier</a>
+
+	</div>
+</div>

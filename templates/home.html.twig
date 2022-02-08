@@ -5,32 +5,12 @@
 {% endblock %}
 
 {% block body %}
-
-	{% if app.user %}
-		<pre>
-			{{ dump(app.user) }}
-		</pre>
-	{% else %}
-		<p>Non connecté</p>
-	{% endif %}
-
 	<h1>Nos produits phares:
 	</h1>
 	<div class="row">
 		{% for p in products %}
 			<div class="col">
-				<div class="card">
-					<img src="{{ p.mainPicture }}" class="img-fluid" alt="">
-					<div class="card-body">
-						<span class="badge bg-secondary">{{ p.category.name }}</span>
-						<h4 class="card-title">{{ p.name }}</h4>
-						<h3>{{ p.price / 100 }}
-							&euro;</h3>
-						<p class="card-text">{{ p.shortDescription }}</p>
-						<a href="#" class="btn-primary btn-sm">test</a>
-						<a href="#" class="btn-success btn-sm">bouton</a>
-					</div>
-				</div>
+				{% include "product/_product_card.html.twig" %}
 			</div>
 		{% endfor %}
 	</div>

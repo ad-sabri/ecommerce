@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+{% set nbrArticles = cartService.getDetailedCartItems()|length %}
+
+{% block title %}
+	{% if nbrArticles > 0 %}
+		Mon Panier ({{ nbrArticles }}
+		articles)
+	{% else %}
+		Mon Panier
+	{% endif %}
+{% endblock %}
+
+{% block body %}
+	<h3>Mon panier (
+		{{ nbrArticles}}
+		articles)</h3>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Produit</th>
+				<th>Prix</th>
+				<th>Quantitée</th>
+				<th>Total</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for item in items %}
+				<tr>
+					<td>{{ item.product.name }}</td>
+					<td>{{ item.product.price }}</td>
+					<td>{{ item.quantity }}</td>
+					<td>{{ item.total }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="3">Total:</td>
+				<td>
+					<strong>{{ total }}
+						&euro;</strong>
+				</td>
+
+			</tr>
+		</tfoot>
+	</table>
+{% endblock %}

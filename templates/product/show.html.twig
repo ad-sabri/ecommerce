@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block body %}
+
 	<h1>{{ product.name }}</h1>
 
 	<div class="row">
@@ -15,9 +16,9 @@
 			<h3>{{ product.price / 100 }}
 				&euro;</h3>
 			<p>{{ product.shortDescription }}</p>
-			<button type="button" class="btn btn-success">
+			<a href="{{ path('cart_add', {'id': product.id} )}}" type="button" class="btn btn-success">
 				<i class="fas fa-shopping-cart"></i>
-				Ajouter au panier</button>
+				Ajouter au panier</a>
 
 		</div>
 	</div>

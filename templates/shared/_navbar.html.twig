@@ -16,21 +16,27 @@
 				{% for c in categoryRepsository.findAll() %}
 
 					<li class="nav-item">
-						<a class="nav-link" href="#">{{ c.name }}</a>
+						<a class="nav-link" href="{{ path('product_category', {'slug': c.slug}) }}">{{ c.name }}</a>
 					</li>
 				{% endfor %}
 			</ul>
 
 			<ul class="navbar-nav">
 
+				<li class="nav-item">
+					<a href="{{ path('cart_show') }}" class="nav-link position-relative">
+						<i class="fas fa-shopping-cart"></i>
+						<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">
+							{{ cartService.getDetailedCartItems()|length }}
+						</span>
+					</a>
+				</li>
+
 				{% if app.user %}
 					<button type="button" class="btn btn-success disabled btn-sm">{{ app.user.email }}</button>
-
 					<li class="nav-item">
 						<a href="{{ path('logout') }}" class="btn btn-outline-danger">Déconnexion</a>
-
 					</li>
-
 				{% else %}
 
 					<li class="nav-item">
