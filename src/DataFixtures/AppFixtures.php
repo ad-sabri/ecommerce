@@ -6,18 +6,21 @@ use Faker\Factory;
 use App\Entity\User;
 use App\Entity\Product;
 use App\Entity\Category;
+use App\Entity\Purchase;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
     protected $slugger;
 
-    public function __construct(SluggerInterface $slugger)
+    public function __construct(SluggerInterface $slugger, UserPasswordHasherInterface $passwordHasher)
     {
         $this->slugger = $slugger;
+        $this->passwordHasher = $passwordHasher;
     }
 
     public function load(ObjectManager $manager)
@@ -25,22 +28,19 @@ class AppFixtures extends Fixture
         $faker = Factory::create('fr_FR');
         $faker->addProvider(new \Bluemmb\Faker\PicsumPhotosProvider($faker));
 
-        $admin = new User;
+        $users = [];
 
-        $admin->setEmail("admin@ecommerce.com")
-            ->setPassword("password")
-            ->setFullName("Admin")
-            ->setRoles(['ROLE_ADMIN']);
+        for ($u = 0; $u < 6; $u++) {
+            $user = new User;
 
-        $manager->persist($admin);
+            $user->setEmail($faker->freeEmail)
+                ->setPassword($this->passwordHasher->hashPassword($user, "password"))
+                ->setRoles([]);
 
-        $user = new User();
+            $users[] = $user;
 
-        $user->setEmail("user@ecommerce.com")
-            ->setPassword("password")
-            ->setFullName("User");
-
-        $manager->persist($user);
+            $manager->persist($user);
+        }
 
         for ($c = 1; $c < 4; $c++) {
             $category = new Category;
@@ -61,6 +61,23 @@ class AppFixtures extends Fixture
 
                 $manager->persist($product);
             }
+        }
+
+        for ($p = 0; $p < mt_rand(10, 20); $p++) {
+            $purchase = new Purchase;
+
+            $purchase->setFullName($faker->name)
+                ->setAddress($faker->streetAddress)
+                ->setPostalCode($faker->postcode)
+                ->setCity($faker->city)
+                ->setUser($faker->randomElement($users))
+                ->setTotal(mt_rand(2000, 30000));
+
+            if ($faker->boolean(80)) {
+                $purchase->setStatus(Purchase::STATUS_PAID);
+            }
+
+            $manager->persist($purchase);
         }
 
         $manager->flush();
