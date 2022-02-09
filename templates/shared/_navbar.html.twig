@@ -26,8 +26,7 @@
 				<li class="nav-item">
 					<a href="{{ path('cart_show') }}" class="nav-link position-relative">
 						<i class="fas fa-shopping-cart"></i>
-						<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">
-							{{ cartService.getDetailedCartItems()|length }}
+						<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">{{ cartService.getDetailedCartItems()|length }}
 						</span>
 					</a>
 				</li>

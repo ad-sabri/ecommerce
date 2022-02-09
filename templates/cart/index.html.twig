@@ -21,6 +21,7 @@
 				<th>Prix</th>
 				<th>Quantitée</th>
 				<th>Total</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -30,6 +31,11 @@
 					<td>{{ item.product.price }}</td>
 					<td>{{ item.quantity }}</td>
 					<td>{{ item.total }}</td>
+					<td>
+						<a href="{{ path("cart_delete", {'id': item.product.id}) }}" class="btn btn-sm btn-danger">
+							<i class="fas fa-trash"></i>
+						</a>
+					</td>
 				</tr>
 			{% endfor %}
 		</tbody>
