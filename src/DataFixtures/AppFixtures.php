@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\Product;
 use App\Entity\Category;
 use App\Entity\Purchase;
+use App\Entity\PurchaseItem;
 use Bluemmb\Faker\PicsumPhotosProvider;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -42,6 +43,8 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
 
+        $products = [];
+
         for ($c = 1; $c < 4; $c++) {
             $category = new Category;
 
@@ -50,7 +53,7 @@ class AppFixtures extends Fixture
 
             $manager->persist($category);
 
-            for ($p = 0; $p < mt_rand(15, 20); $p++) {
+            for ($p = 0; $p < mt_rand(10, 40); $p++) {
                 $product = new Product;
                 $product->setName($faker->sentence())
                     ->setPrice(mt_rand(100, 200))
@@ -59,11 +62,13 @@ class AppFixtures extends Fixture
                     ->setShortDescription($faker->paragraph(mt_rand(1, 3)))
                     ->setMainPicture($faker->imageUrl(400, 400, true));
 
+                $products[] = $product;
+
                 $manager->persist($product);
             }
         }
 
-        for ($p = 0; $p < mt_rand(10, 20); $p++) {
+        for ($p = 0; $p < mt_rand(10, 30); $p++) {
             $purchase = new Purchase;
 
             $purchase->setFullName($faker->name)
@@ -71,7 +76,25 @@ class AppFixtures extends Fixture
                 ->setPostalCode($faker->postcode)
                 ->setCity($faker->city)
                 ->setUser($faker->randomElement($users))
-                ->setTotal(mt_rand(2000, 30000));
+                ->setTotal(mt_rand(2000, 30000))
+                ->setPurchasedAt($faker->dateTimeBetween('-3 months'));
+
+            $selectedProducts = $faker->randomElements($products, mt_rand(1, 3));
+
+            foreach ($selectedProducts as $product) {
+                $purchaseItem = new PurchaseItem;
+
+                $purchaseItem->setProduct($product)
+                    ->setQuantity(mt_rand(1, 3))
+                    ->setProductName($product->getName())
+                    ->setProductPrice($product->getPrice())
+                    ->setTotal(
+                        $purchaseItem->getProductPrice() * $purchaseItem->getQuantity()
+                    )
+                    ->setPurchase($purchase);
+
+                $manager->persist($purchaseItem);
+            }
 
             if ($faker->boolean(80)) {
                 $purchase->setStatus(Purchase::STATUS_PAID);

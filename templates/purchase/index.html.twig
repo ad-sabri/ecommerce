@@ -21,9 +21,19 @@
 				<tr>
 					<td>{{ p.id }}</td>
 					<td>{{ p.address }}</td>
-					<td>TODO</td>
-					<td>{{ p.total /100 }}
-						&euro;</td>
+					<td>{{ p.purchasedAt  | date('d-m-Y') }}</td>
+					<td>{{ p.total /100 }}&euro;</td>
+					<td>
+						<ul>
+							{% for item in p.purchaseItems %}
+								<li>{{ item.quantity }}x
+									{{ item.productName }}
+									(
+									{{ item.total / 100 }}
+									)</li>
+							{% endfor %}
+						</ul>
+					</td>
 				</tr>
 			{% endfor %}
 		</tbody>
